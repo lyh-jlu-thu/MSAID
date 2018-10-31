@@ -1,0 +1,40 @@
+classpath=${jpf-symbc}/build/examples
+
+sourcepath=${jpf-symbc}/src/examples
+
+target=myTest.listnerliyahui
+
+
+symbolic.method = myTest.listnerliyahui.foo(sym#sym);
+ 
+#listener = gov.nasa.jpf.listener.ExecTracker
+#listener = gov.nasa.jpf.symbc.heap.HeapSymbolicListener
+#listener = gov.nasa.jpf.symbc.SymbolicListener
+#listener = gov.nasa.jpf.symbc.tree.ATreeListner
+listener = gov.nasa.jpf.symbc.sequences.SymbolicSequenceListener
+
+symbolic.green = false
+
+symbolic.lazy = true
+#symbolic.lazy.subtypes = true
+vm.storage.class=nil
+
+
+
+#symbolic.visualizer.outpath = ${jpf-symbc}/prettyprint
+#symbolic.visualizer.outputformat = pdf
+#listener = gov.nasa.jpf.symbc.tree.visualizer.DOTVisualizerListener2
+
+#vm.path_output={true|false}
+#symbolic.debug=true
+symbolic.dp = z3
+
+
+#symbolic.dp = coral
+#symbolic.dp = dreal
+#symbolic.dp = iasolver
+#symbolic.dp = yices
+#symbolic.dp = z3bitvectorinc
+#symbolic.dp = z3inc
+#symbolic.dp = debug
+#symbolic.dp = compare

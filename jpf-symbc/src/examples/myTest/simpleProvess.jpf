@@ -1,0 +1,21 @@
+classpath=${jpf-symbc}/build/examples
+
+sourcepath=${jpf-symbc}/src/examples
+
+target=myTest.SimpleProcessor
+
+
+symbolic.method = myTest.SimpleProcessor.process(sym#sym#sym#sym#sym#sym#sym);
+ 
+
+#listener = gov.nasa.jpf.listener.ExecTracker
+
+symbolic.green = false
+
+symbolic.lazy = true
+#symbolic.lazy.subtypes = true
+vm.storage.class=nil
+
+symbolic.debug=true
+
+symbolic.dp=z3bitvector

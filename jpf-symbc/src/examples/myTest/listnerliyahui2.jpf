@@ -1,0 +1,20 @@
+classpath=${jpf-symbc}/build/examples
+
+sourcepath=${jpf-symbc}/src/examples
+
+target=myTest.listnerliyahui2
+
+
+symbolic.method = myTest.listnerliyahui2.foo(sym#sym);
+ 
+#listener = gov.nasa.jpf.symbc.SymbolicListener
+listener = gov.nasa.jpf.symbc.sequences.SymbolicSequenceListener
+
+symbolic.green = false
+
+symbolic.lazy = true
+vm.storage.class=nil
+
+
+#symbolic.debug=true
+symbolic.dp = z3

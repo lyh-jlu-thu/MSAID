@@ -1,0 +1,48 @@
+1.	关于参数设置：
+运行需要配置.SPF文件，分别制定main方法路径，所在类；及被测函数所在类；官网的参数说明 https://babelfish.arc.nasa.gov/trac/jpf/attachment/wiki/projects/jpfsymbc/doc/Example.jpf
+某些参数的设置：
+（1）symbolic.dp =z3BitVector; 选择z3bitsolver, 且默认bit调整为64；
+（2）classpath 的设置，把整个工程的jar包路径都写进去，其中ONOS需要Maven的所依赖的所有jar包；不同应用依赖的jar包不同。
+附件中有配置文件和Main方法文件：
+2，总的来说在SPF试验中，Floodlight比ONOS实用很多，提供了Test方法，只需要修改部分SPF的代码；代码结构没有floodlight清晰与独立。
+3. 其中最近又找了些其他论文中出现的Floodlight的第三方应用RuleFlow, FoxNox, FlowSacle, SNAC, Straros, VTC等等。 LegoSDN总结的很详细。
+相关连接：Big Tap Monitoring Fabric. http://goo.gl/UHDqjT    FlowScale. http://goo.gl/WewH1U  Stratos: Virtual Middleboxes as First-Class Entities.
+
+4．ONOS Test文件中，可以执行的且信息最多可以仿照写的是HostLocationProviderTest
+5.现在记录相应输出的做法是，首先在源代码中有规则下发或者处理的时候，加上system.out.println语句，因为对于符号执行引擎来讲，无论是下发规则或者单纯地加减操作，在语义上是没有区别的，所以现在是加输出语句加以区分。
+
+整理如下：（Firewall）
+Trace: constrains	No Flow_mod, cntx: decision;
+decision.addToContext(cntx)
+dstAddresss1 = 0 &&
+srcAddresss1 = 0	No firewall rule  found for PacketIn={}OFPacketInVer13(xid=1, bufferId=4294967295, totalLen=0, reason=NO_MATCH, tableId=0xff, cookie=0x0000000000000000, match=OFMatchV3Ver13(in_port=1), data=[0, 68, 51, 34, 17, 0, 0, 17, 34, 51, 68, 85, -127, 0, 0, 42, 8, 0, 69, 0, 0, 41, 0, 0, 0, 0, -128, 6, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
+action DROP wildcard OFMatchV3Ver13(in_port=1, eth_dst=00:44:33:22:11:00, eth_src=00:11:22:33:44:55, eth_type=0x800, ip_proto=0x6, ipv4_src=0.0.0.0, ipv4_dst=0.0.0.0, tcp_src=80, tcp_dst=81)
+dstAddresss1 != 0 &&
+srcAddresss1 = 0	
+(srcAddresss1 & -1) != -1062731519 &&
+dstAddresss1 = 0 &&
+srcAddresss1 != 0	
+(srcAddresss1 & -1) = -1062731519 &&
+dstAddresss1 = 0 &&
+srcAddresss1 != 0	
+(srcAddresss1 & -1) != -1062731519 &&
+dstAddresss1 != 0 &&
+srcAddresss1 != 0	
+(dstAddresss1 & -1) != -1062731516 &&
+(srcAddresss1 & -1) = -1062731519 &&
+dstAddresss1 != 0 &&
+srcAddresss1 != 0	
+(dstAddresss1 & -1) = -1062731516 &&
+(srcAddresss1 & -1) = -1062731519 &&
+dstAddresss1 != 0 &&
+srcAddresss1 != 0	deny rule found action DROP wildcard OFMatchV3Ver13(eth_dst=00:00:00:00:00:02, eth_src=00:00:00:00:00:01, eth_type=0x800, ip_proto=0x6, ipv4_src=192.168.1.1, ipv4_dst=192.168.1.4)
+
+
+HostLocationProvider 不下发OpenFlow消息，因此打印处理语句
+Ethernet.TYPE_ARP
+(type  & -1)=2504 && type!=0	requestPackets(arpSelector, appid, 16)
+(type  & -1)=2018	requestPackets(ipv4NsSelector, appId, 16)
+(type& -1)= 34525&& type!=0	requestPackets(ipv6NsSelector, appId, 16)
+type!=0	requestPackets(dhcpServerSelector, , appId, 16)
+(type  & -1)!=2504&&(type  & -1)!=2018&&(type  & -1)!=34525&&(type  & -1)!=32821&&type!=0	
+
